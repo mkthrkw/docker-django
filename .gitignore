@@ -1,0 +1,4 @@
+src/apps/
+.env
+static/
+src/config/__pycache__/
