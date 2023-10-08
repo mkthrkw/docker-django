@@ -1,0 +1,23 @@
+{% extends "registration/layout.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <h2 class="text-center mb-5">Home</h2>
+        <div class='shadow-lg rounded p-5 text-center' style="width: 18rem;">
+            {% if user.is_authenticated %}
+                <p class="mb-5">こんにちは {{ user.username }}</p>
+                <a href="{% url 'logout'%}" class="btn btn-secondary btn-lg">
+                    ログアウト
+                </a>
+            {% else %}
+                <p>
+                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+                        ログイン
+                    </a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

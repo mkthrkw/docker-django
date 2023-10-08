@@ -1,0 +1,25 @@
+{% extends "registration/layout.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <h2 class="text-center mb-5">Login</h2>
+        <div class='shadow-lg rounded p-4' style="width: 18rem;">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="username" class="form-label">ユーザー名</label>
+                    <input type='text' id='username' name='username' placeholder='Username' class="form-control" required>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">パスワード</label>
+                    <input type='password' id='password' name='password' placeholder='Password' class="form-control" required>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-outline-primary btn-lg" type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

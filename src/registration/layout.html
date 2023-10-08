@@ -1,0 +1,36 @@
+{% load django_bootstrap5 %}
+<!doctype html>
+<html lang="ja">
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Bootstrap CSS -->
+        {% bootstrap_css %}
+        {% bootstrap_javascript %}
+
+        <title>{% block title %}{% endblock %}</title>
+
+        {% block head_scripts %}
+        <!-- head_scripts -->
+        {% endblock %}
+
+    </head>
+    <body>
+        <main class="container pt-5">
+            {% block content %}
+            <!-- メインコンテンツ -->
+            {% endblock %}
+        </main>
+        <footer class="footer mt-auto py-1 fixed-bottom">
+            <div class="text-center">
+                <span class="text-muted">&copy; All Right Reserved.</span>
+            </div>
+        </footer>
+
+        {% block foot_scripts %}
+        <!-- foot_scripts -->
+        {% endblock %}
+    </body>
+</html>
