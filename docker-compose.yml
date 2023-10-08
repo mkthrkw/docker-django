@@ -1,0 +1,53 @@
+version: '3'
+
+services:
+  db:
+    build: ./infra/mysql
+    ports:
+      - ${DB_HOST_PORT:-3306}:3306
+    volumes:
+      - ./infra/mysql/my.cnf:/etc/my.cnf
+      - db-store:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-django}
+      - MYSQL_USER=${MYSQL_USER:-django}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-django}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-django}
+      - TZ=Asia/Tokyo
+
+  app:
+    build:
+      context: ./infra/python
+      args:
+        - WORKDIR=/var/www/src
+    command: uwsgi --ini /tmp/uwsgi/uwsgi.ini
+    volumes:
+      - ${HOST_WORKDIR:-./src}:/var/www/src
+      - ./static:/var/www/static
+      - ./infra/python/uwsgi.ini:/tmp/uwsgi/uwsgi.ini
+      - ./infra/python/reload.trigger:/tmp/uwsgi/reload.trigger
+    expose:
+      - "8001"
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-django}
+      - MYSQL_USER=${MYSQL_USER:-django}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-django}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-django}
+      - ENV_STATE=${ENV_STATE:-local}
+    depends_on:
+      - db
+
+  web:
+    image: nginx:1.21.3-alpine
+    ports:
+      - ${WEB_HOST_PORT:-8000}:8000
+    volumes:
+      - ./static:/var/www/static
+      - ./infra/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - ./infra/nginx/uwsgi_params:/etc/nginx/uwsgi_params
+    working_dir: /var/www/static
+    depends_on:
+      - app
+
+volumes:
+  db-store:
